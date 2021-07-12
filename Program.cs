@@ -13,22 +13,14 @@ namespace FancyCalculator
              double y = getDoubleInput("Enter a second number, and I will add it to the first.");
 
              double result = x + y;*/
-            Console.WriteLine("Enter what you would like to see added.");
-            string equation = Console.ReadLine();
-            string[] parts = { };
-            string op = "";
-
-            if (equation.Contains("+"))
-            {
-                op = "+";
-                parts = equation.Split("+");
-            }
-            else if (equation.Contains("-"))
-            {
-                op = "-";
-                parts = equation.Split("-");
-            }
+            Console.WriteLine("Enter in the operation you would like to perform");
             
+            string equation = Console.ReadLine();
+
+            string op = getOperation(equation);
+
+            string[] parts = equation.Split(op);
+
             double x;
             double y;
             double result;
@@ -36,10 +28,10 @@ namespace FancyCalculator
             bool firstValid = Double.TryParse(parts[0], out x);
             bool secondValid = Double.TryParse(parts[1], out y);
 
-
             if (firstValid && secondValid)
             {
-                result = x + (op == "-" ? y * -1: y);
+
+                result = performOperation(x, op, y);
                 Console.WriteLine($"Result: {result}");
             }
             else
@@ -74,6 +66,34 @@ namespace FancyCalculator
             } while (loop);
 
             return result;
+        }
+
+        public static string getOperation(string equation)
+        {
+            foreach (char ch in "+-*/") {
+                if (equation.Contains(ch))
+                {
+                    return ch.ToString();
+                }
+            }
+            return null;
+        }
+
+        public static double performOperation(double x, string op, double y)
+        {
+            switch (op)
+            {
+                case "+":
+                    return x + y;
+                case "-":
+                    return x - y;
+                case "/":
+                    return x / y;
+                case "*":
+                    return x * y;
+                default:
+                    return 0;
+            }
         }
     }
 
