@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FancyCalculator
 {
@@ -8,8 +9,19 @@ namespace FancyCalculator
         {
             Console.WriteLine("A Console Calculator");
 
-            double x = getDoubleInput("Enter a number.");
-            double y = getDoubleInput("Enter a second number, and I will add it to the first.");
+            /* double x = getDoubleInput("Enter a number.");
+             double y = getDoubleInput("Enter a second number, and I will add it to the first.");
+
+             double result = x + y;*/
+            Console.WriteLine("Enter what you would like to see added.");
+            string equation = Console.ReadLine();
+
+            string[] parts = equation.Split("+");
+            double x;
+            double y;
+
+            Double.TryParse(parts[0], out x);
+            Double.TryParse(parts[1], out y);
 
             double result = x + y;
 
