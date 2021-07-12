@@ -25,16 +25,20 @@ namespace FancyCalculator
                     break;
                 }
                 string op = getOperation(equation);
-
                 string[] parts = equation.Split(op);
+
+                if (parts.Length != 2)
+                {
+                    Console.WriteLine("An operation must be written in the form '5 + 8'. Please try again.");
+                }
 
                 double x = 0;
                 double y = 0;
                 double result;
-                bool firstValid = true;
-                bool secondValid = true;
+                bool firstValid = false;
+                bool secondValid = false;
 
-                if (op != null)
+                if (op != null & parts.Length == 2)
                 {
                     firstValid = Double.TryParse(parts[0], out x);
                     secondValid = Double.TryParse(parts[1], out y);
@@ -46,7 +50,7 @@ namespace FancyCalculator
                     result = performOperation(x, op, y);
                     Console.WriteLine($"Result: {result}");
                 }
-                else
+                else if (parts.Length == 2)
                 {
                     if (!firstValid)
                     {
