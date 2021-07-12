@@ -19,14 +19,30 @@ namespace FancyCalculator
             string[] parts = equation.Split("+");
             double x;
             double y;
+            double result;
 
-            Double.TryParse(parts[0], out x);
-            Double.TryParse(parts[1], out y);
+            bool firstValid = Double.TryParse(parts[0], out x);
+            bool secondValid = Double.TryParse(parts[1], out y);
 
-            double result = x + y;
 
-            Console.WriteLine($"Result: {result}");
+            if (firstValid && secondValid)
+            {
+                result = x + y;
+                Console.WriteLine($"Result: {result}");
+            }
+            else
+            {
+                if (!firstValid)
+                {
+                    Console.WriteLine($"The first value, {parts[0].Trim()}, is not a number.");
+                }
+                if (!secondValid)
+                {
+                    Console.WriteLine($"The second value, {parts[1].Trim()}, is not a number.");
+                }
+            }
         }
+
         public static double getDoubleInput(string prompt)
         {
             bool loop;
