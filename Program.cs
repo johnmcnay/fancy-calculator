@@ -13,47 +13,56 @@ namespace FancyCalculator
              double y = getDoubleInput("Enter a second number, and I will add it to the first.");
 
              double result = x + y;*/
-            Console.WriteLine("Enter in the operation you would like to perform");
-            
-            string equation = Console.ReadLine();
 
-            string op = getOperation(equation);
-
-            string[] parts = equation.Split(op);
-
-            double x = 0;
-            double y = 0;
-            double result;
-            bool firstValid = true;
-            bool secondValid = true;
-
-            if (op != null)
-            {
-                firstValid = Double.TryParse(parts[0], out x);
-                secondValid = Double.TryParse(parts[1], out y);
-            }
-            
-            if (op != null && firstValid && secondValid)
+            while (true)
             {
 
-                result = performOperation(x, op, y);
-                Console.WriteLine($"Result: {result}");
+                Console.WriteLine("Enter in the operation you would like to perform");
+
+                string equation = Console.ReadLine();
+                if (equation.ToLower() == "exit")
+                {
+                    break;
+                }
+                string op = getOperation(equation);
+
+                string[] parts = equation.Split(op);
+
+                double x = 0;
+                double y = 0;
+                double result;
+                bool firstValid = true;
+                bool secondValid = true;
+
+                if (op != null)
+                {
+                    firstValid = Double.TryParse(parts[0], out x);
+                    secondValid = Double.TryParse(parts[1], out y);
+                }
+
+                if (op != null && firstValid && secondValid)
+                {
+
+                    result = performOperation(x, op, y);
+                    Console.WriteLine($"Result: {result}");
+                }
+                else
+                {
+                    if (!firstValid)
+                    {
+                        Console.WriteLine($"The first value, '{parts[0].Trim()}', is not a number.");
+                    }
+                    if (!secondValid)
+                    {
+                        Console.WriteLine($"The second value, '{parts[1].Trim()}', is not a number.");
+                    }
+                    if (op == null)
+                    {
+                        Console.WriteLine("Invalid Operator: Must use + - / *");
+                    }
+                }
             }
-            else
-            {
-                if (!firstValid)
-                {
-                    Console.WriteLine($"The first value, '{parts[0].Trim()}', is not a number.");
-                }
-                if (!secondValid)
-                {
-                    Console.WriteLine($"The second value, '{parts[1].Trim()}', is not a number.");
-                }
-                if (op == null)
-                {
-                    Console.WriteLine("Invalid Operator: Must use + - / *");
-                }
-            }
+
         }
 
         public static double getDoubleInput(string prompt)
