@@ -11,8 +11,8 @@ namespace FancyCalculator
 
             /* double x = getDoubleInput("Enter a number.");
              double y = getDoubleInput("Enter a second number, and I will add it to the first.");
-
-             double result = x + y;*/
+            */
+            double result = 0;
 
             while (true)
             {
@@ -25,48 +25,50 @@ namespace FancyCalculator
                     break;
                 }
                 string op = getOperation(equation);
-                string[] parts = equation.Split(op);
 
-                if (parts.Length != 2)
+                if (isValidEquationInput(equation))
                 {
-                    Console.WriteLine("An operation must be written in the form '5 + 8'. Please try again.");
-                }
+                    string[] parts = equation.Split(" ");
 
-                double x = 0;
-                double y = 0;
-                double result;
-                bool firstValid = false;
-                bool secondValid = false;
+                    if (isContinuation(parts))
+                    {
+                        result = performOperation(result, op, Double.Parse(parts[1]));
+                    } else
+                    {
+                        result = performOperation(Double.Parse(parts[0]), op, Double.Parse(parts[2]));
+                    }
 
-                if (op != null & parts.Length == 2)
-                {
-                    firstValid = Double.TryParse(parts[0], out x);
-                    secondValid = Double.TryParse(parts[1], out y);
-                }
-
-                if (op != null && firstValid && secondValid)
-                {
-
-                    result = performOperation(x, op, y);
                     Console.WriteLine($"Result: {result}");
-                }
-                else if (parts.Length == 2)
+                } else
                 {
-                    if (!firstValid)
-                    {
-                        Console.WriteLine($"The first value, '{parts[0].Trim()}', is not a number.");
-                    }
-                    if (!secondValid)
-                    {
-                        Console.WriteLine($"The second value, '{parts[1].Trim()}', is not a number.");
-                    }
-                    if (op == null)
-                    {
-                        Console.WriteLine("Invalid Operator: Must use + - / *");
-                    }
+                    Console.WriteLine("An operation must be written in the form '5 + 8' or '+ 8'. Please try again.");
                 }
             }
 
+        }
+
+        public static bool isContinuation(string[] parts)
+        {
+            return isOperator(parts[0]);
+        }
+
+        public static bool isValidEquationInput(string equation)
+        {
+            string[] parts = equation.Split(" ");
+
+            return (hasValidOperator(parts) && hasValidOperands(parts));
+
+        }
+
+        public static bool hasValidOperands(string[] parts)
+        {
+            return ( (isOperator(parts[0]) && Double.TryParse(parts[1], out var output)) || 
+                (isOperator(parts[1]) && Double.TryParse(parts[0], out var num1) && Double.TryParse(parts[2], out var num2)));
+        }
+
+        public static bool hasValidOperator(string[] parts)
+        {
+            return (isOperator(parts[0]) || isOperator(parts[1]));
         }
 
         public static double getDoubleInput(string prompt)
@@ -88,6 +90,18 @@ namespace FancyCalculator
             } while (loop);
 
             return result;
+        }
+
+        public static bool isOperator(string op)
+        {
+            foreach (char ch in "+-*/")
+            {
+                if (ch.ToString() == op)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static string getOperation(string equation)
