@@ -13,6 +13,7 @@ namespace FancyCalculator
              double y = getDoubleInput("Enter a second number, and I will add it to the first.");
             */
             double result = 0;
+            List<string> history = new List<string>();
 
             while (true)
             {
@@ -24,6 +25,22 @@ namespace FancyCalculator
                 {
                     break;
                 }
+                if (equation.ToLower() == "history")
+                {
+                    if (history.Count == 0)
+                    {
+                        Console.WriteLine("No operations have been performed.");
+                        continue;
+                    }
+
+                    Console.WriteLine("All of the operations thus far:");
+
+                    foreach (string entry in history)
+                    {
+                        Console.WriteLine(entry);   
+                    }
+                    continue;
+                }
                 string op = getOperation(equation);
 
                 if (isValidEquationInput(equation))
@@ -32,10 +49,23 @@ namespace FancyCalculator
 
                     if (isContinuation(parts))
                     {
+                        if (history.Count == 0)
+                        {
+                            Console.WriteLine("Perform at least one complete calcuation.");
+                            continue;
+                        }
+
+                        string log = $"{result} {op} {parts[1]} = ";
+
                         result = performOperation(result, op, Double.Parse(parts[1]));
+                        history.Add(log + result.ToString());
+
+
                     } else
                     {
                         result = performOperation(Double.Parse(parts[0]), op, Double.Parse(parts[2]));
+
+                        history.Add($"{parts[0]} {op} {parts[2]} = {result}");
                     }
 
                     Console.WriteLine($"Result: {result}");
