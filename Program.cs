@@ -21,14 +21,19 @@ namespace FancyCalculator
 
             string[] parts = equation.Split(op);
 
-            double x;
-            double y;
+            double x = 0;
+            double y = 0;
             double result;
+            bool firstValid = true;
+            bool secondValid = true;
 
-            bool firstValid = Double.TryParse(parts[0], out x);
-            bool secondValid = Double.TryParse(parts[1], out y);
-
-            if (firstValid && secondValid)
+            if (op != null)
+            {
+                firstValid = Double.TryParse(parts[0], out x);
+                secondValid = Double.TryParse(parts[1], out y);
+            }
+            
+            if (op != null && firstValid && secondValid)
             {
 
                 result = performOperation(x, op, y);
@@ -43,6 +48,10 @@ namespace FancyCalculator
                 if (!secondValid)
                 {
                     Console.WriteLine($"The second value, '{parts[1].Trim()}', is not a number.");
+                }
+                if (op == null)
+                {
+                    Console.WriteLine("Invalid Operator: Must use + - / *");
                 }
             }
         }
