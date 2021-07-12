@@ -15,8 +15,20 @@ namespace FancyCalculator
              double result = x + y;*/
             Console.WriteLine("Enter what you would like to see added.");
             string equation = Console.ReadLine();
+            string[] parts = { };
+            string op = "";
 
-            string[] parts = equation.Split("+");
+            if (equation.Contains("+"))
+            {
+                op = "+";
+                parts = equation.Split("+");
+            }
+            else if (equation.Contains("-"))
+            {
+                op = "-";
+                parts = equation.Split("-");
+            }
+            
             double x;
             double y;
             double result;
@@ -27,18 +39,18 @@ namespace FancyCalculator
 
             if (firstValid && secondValid)
             {
-                result = x + y;
+                result = x + (op == "-" ? y * -1: y);
                 Console.WriteLine($"Result: {result}");
             }
             else
             {
                 if (!firstValid)
                 {
-                    Console.WriteLine($"The first value, {parts[0].Trim()}, is not a number.");
+                    Console.WriteLine($"The first value, '{parts[0].Trim()}', is not a number.");
                 }
                 if (!secondValid)
                 {
-                    Console.WriteLine($"The second value, {parts[1].Trim()}, is not a number.");
+                    Console.WriteLine($"The second value, '{parts[1].Trim()}', is not a number.");
                 }
             }
         }
