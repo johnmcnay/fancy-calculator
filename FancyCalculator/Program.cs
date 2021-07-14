@@ -28,15 +28,35 @@ namespace FancyCalculator
                 {
                     break;
                 }
-                if (equation.ToLower() == "history")
-                {
+                if (equation.ToLower().Contains("history"))
+                { 
+                    if (equation.ToLower() == "history")
+                    {
+
+                        if (history.Count == 0)
+                        {
+                            Console.WriteLine("No operations have been performed.");
+                            continue;
+                        }
+
+                        displayHistory();
+                        continue;
+                    }
+
+                    string[] parts = equation.Split(" ");
+
+                    if (parts.Length != 2 || parts[0].ToLower() != "history" || isOperator(parts[1]) == false)
+                    {
+                        Console.WriteLine("Invalid command. Must be in form 'history' or 'history +'");
+                    }
+
                     if (history.Count == 0)
                     {
                         Console.WriteLine("No operations have been performed.");
                         continue;
                     }
 
-                    displayHistory();
+                    displayHistory(parts[1]);
 
                     continue;
                 }
@@ -75,6 +95,19 @@ namespace FancyCalculator
                 }
             }
 
+        }
+
+        private static void displayHistory(string op)
+        {
+            Console.WriteLine("All of the operations thus far:");
+
+            foreach (string entry in history)
+            {
+                if (getOperation(entry) == op)
+                {
+                    Console.WriteLine(formatHistory(entry));
+                }
+            }
         }
 
         private static void displayHistory()
