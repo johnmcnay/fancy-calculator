@@ -5,6 +5,11 @@ namespace FancyCalculator
 {
     class Program
     {
+
+        public static double result = 0;
+        public static int maxEntryLength = 0;
+        public static List<string> history = new List<string>();
+
         static void Main(string[] args)
         {
             Console.WriteLine("A Console Calculator");
@@ -12,9 +17,7 @@ namespace FancyCalculator
             /* double x = getDoubleInput("Enter a number.");
              double y = getDoubleInput("Enter a second number, and I will add it to the first.");
             */
-            double result = 0;
-            List<string> history = new List<string>();
-
+            
             while (true)
             {
 
@@ -33,12 +36,8 @@ namespace FancyCalculator
                         continue;
                     }
 
-                    Console.WriteLine("All of the operations thus far:");
+                    displayHistory();
 
-                    foreach (string entry in history)
-                    {
-                        Console.WriteLine(entry);   
-                    }
                     continue;
                 }
                 string op = getOperation(equation);
@@ -55,17 +54,18 @@ namespace FancyCalculator
                             continue;
                         }
 
-                        string log = $"{result} {op} {parts[1]} = ";
+                        string log = $"{result} {op} {parts[1]}";
 
                         result = performOperation(result, op, Double.Parse(parts[1]));
-                        history.Add(log + result.ToString());
+                        history.Add(log + " = " + result.ToString());
 
-
+                        maxEntryLength = Math.Max(log.Length, maxEntryLength);
                     } else
                     {
                         result = performOperation(Double.Parse(parts[0]), op, Double.Parse(parts[2]));
-
-                        history.Add($"{parts[0]} {op} {parts[2]} = {result}");
+                        string log = $"{parts[0]} {op} {parts[2]}";                            
+                        history.Add($"{log} = {result}");
+                        maxEntryLength = Math.Max(log.Length, maxEntryLength);
                     }
 
                     Console.WriteLine($"Result: {result}");
@@ -75,6 +75,26 @@ namespace FancyCalculator
                 }
             }
 
+        }
+
+        private static void displayHistory()
+        {
+            Console.WriteLine("All of the operations thus far:");
+
+            foreach (string entry in history)
+            {
+                Console.WriteLine(formatHistory(entry));
+            }
+        }
+
+        private static string formatHistory(string entry)
+        {
+
+            string[] parts = entry.Split(" = ");
+
+            string left = parts[0].PadRight(maxEntryLength, ' ');
+
+            return $"{left} = {parts[1].Trim()}";
         }
 
         public static bool isContinuation(string[] parts)
