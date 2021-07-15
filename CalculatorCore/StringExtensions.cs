@@ -38,5 +38,12 @@ namespace CalculatorCore
             }
             return false;
         }
+
+        public static bool hasInvalidOperator(this string str)
+        {
+            string[] parts = str.Split(" ");
+
+            return parts.Length > 1 && parts.Length < 4 && parts[1].isOperator() == false && parts[0].isOperator() == false;
+        }
     }
 }

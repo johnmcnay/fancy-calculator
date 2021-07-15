@@ -28,7 +28,7 @@ namespace CalculatorCore
                         return new EvaluationResult { ErrorMessage = $"The first number, '{parts[1]}', was not a valid number." };
                     }
 
-                    result = performOperation(Decimal.Parse(storedValue.ToString()), parts[0], x);
+                    result = performOperation(storedValue, parts[0], x);
 
                     if (String.IsNullOrEmpty(result.ErrorMessage))
                     {
@@ -51,6 +51,7 @@ namespace CalculatorCore
                     }
 
                     result = performOperation(x, parts[1], y);
+
                     if (String.IsNullOrEmpty(result.ErrorMessage))
                     {
                         history.Add(new List<string>()
@@ -63,9 +64,9 @@ namespace CalculatorCore
             }
             else
             {
-                if (parts.Length > 1 && parts[1].isOperator() == false && parts[0].isOperator() == false)
+                if (input.hasInvalidOperator())
                 {
-                    return new EvaluationResult { ErrorMessage = "The operator 'plus' is not valid. Must use + - * /" };
+                    return new EvaluationResult { ErrorMessage = $"The operator '{(parts.Length == 2 ? parts[0] : parts[1])}' is not valid. Must use + - * /" };
                 }
 
                 return new EvaluationResult { ErrorMessage = "The operation must be in the form '5 + 8' or '+ 8'. Please try again." };
