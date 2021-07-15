@@ -1,0 +1,8 @@
+﻿<h2>Hello, @ViewBag.Name!</h2>
+
+<form method="POST" action="/Home/Calculator">
+    <input type="text" name="calculatorInput" />
+    <input type="submit" />
+</form>
+
+<p>Result: @Html.Raw(ViewBag.Result)</p>
