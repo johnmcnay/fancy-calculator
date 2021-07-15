@@ -1,0 +1,13 @@
+﻿
+<p>History:</p>
+
+<table>
+@foreach (var entry in ViewBag.History)
+{
+    <tr>
+        <td>@entry[0]</td>
+        <td>=</td>
+        <td>@entry[1]</td>
+    </tr>
+}
+</table>

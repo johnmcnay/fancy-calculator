@@ -18,6 +18,15 @@ namespace TestableCalculatorRunner
                 {
                     break;
                 }
+                if (expression == "history")
+                {
+                    foreach (var entry in calculator.getHistory())
+                    {
+                        Console.WriteLine($"{entry[0]} = {entry[1]}");
+                        continue;
+                    }
+                }
+
                 var result = calculator.Evaluate(expression);
 
                 if (string.IsNullOrEmpty(result.ErrorMessage))

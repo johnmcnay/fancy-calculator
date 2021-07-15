@@ -17,83 +17,16 @@ namespace FancyCalculator
             /* double x = getDoubleInput("Enter a number.");
              double y = getDoubleInput("Enter a second number, and I will add it to the first.");
             */
-            
-            while (true)
+
+            do
             {
+                Console.WriteLine("Enter in the operation you would like to perform.");
 
-                Console.WriteLine("Enter in the operation you would like to perform");
+                CalculatorInput input = new CalculatorInput(Console.ReadLine());
 
-                string equation = Console.ReadLine();
-                if (equation.ToLower() == "exit")
-                {
-                    break;
-                }
-                if (equation.ToLower().Contains("history"))
-                { 
-                    if (equation.ToLower() == "history")
-                    {
+                input.Execute();
 
-                        if (history.Count == 0)
-                        {
-                            Console.WriteLine("No operations have been performed.");
-                            continue;
-                        }
-
-                        displayHistory();
-                        continue;
-                    }
-
-                    string[] parts = equation.Split(" ");
-
-                    if (parts.Length != 2 || parts[0].ToLower() != "history" || isOperator(parts[1]) == false)
-                    {
-                        Console.WriteLine("Invalid command. Must be in form 'history' or 'history +'");
-                    }
-
-                    if (history.Count == 0)
-                    {
-                        Console.WriteLine("No operations have been performed.");
-                        continue;
-                    }
-
-                    displayHistory(parts[1]);
-
-                    continue;
-                }
-                string op = getOperation(equation);
-
-                if (isValidEquationInput(equation))
-                {
-                    string[] parts = equation.Split(" ");
-
-                    if (isContinuation(parts))
-                    {
-                        if (history.Count == 0)
-                        {
-                            Console.WriteLine("Perform at least one complete calcuation.");
-                            continue;
-                        }
-
-                        string log = $"{result} {op} {parts[1]}";
-
-                        result = performOperation(result, op, Double.Parse(parts[1]));
-                        history.Add(log + " = " + result.ToString());
-
-                        maxEntryLength = Math.Max(log.Length, maxEntryLength);
-                    } else
-                    {
-                        result = performOperation(Double.Parse(parts[0]), op, Double.Parse(parts[2]));
-                        string log = $"{parts[0]} {op} {parts[2]}";                            
-                        history.Add($"{log} = {result}");
-                        maxEntryLength = Math.Max(log.Length, maxEntryLength);
-                    }
-
-                    Console.WriteLine($"Result: {result}");
-                } else
-                {
-                    Console.WriteLine("An operation must be written in the form '5 + 8' or '+ 8'. Please try again.");
-                }
-            }
+            } while (true);
 
         }
 

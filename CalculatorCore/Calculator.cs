@@ -8,7 +8,8 @@ namespace CalculatorCore
 {
     public class Calculator
     {
-        public decimal storedValue = 0;
+        public decimal storedValue = 0m;
+        public List<List<string>> history = new List<List<string>>();
 
         public EvaluationResult Evaluate(string input)
         {
@@ -17,16 +18,26 @@ namespace CalculatorCore
             decimal x;
             decimal y;
           
-            if (isOperator(parts[0]) && parts.Length == 2)
+            if (parts.Length == 2 && isOperator(parts[0]))
             {
                 if (decimal.TryParse(parts[1], out x) == false)
                 {
                     return new EvaluationResult { ErrorMessage = $"\u001b[31mThe first number, '{parts[1]}', was not a valid number.\u001b[0m" };
                 }
 
-                result = performOperation(storedValue, parts[0], x);
+                result = performOperation(Decimal.Parse(storedValue.ToString()), parts[0], x);
+
+                if (String.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    history.Add(new List<string>()
+                    {
+                        $"{storedValue} {input}",
+                        result.Result.ToString()
+                    });
+                        
+                }
             } 
-            else if (isOperator(parts[1]) && parts.Length == 3)
+            else if (parts.Length == 3 && isOperator(parts[1]))
             {
                 if (decimal.TryParse(parts[0], out x) == false)
                 {
@@ -38,6 +49,14 @@ namespace CalculatorCore
                 }
 
                 result = performOperation(x, parts[1], y);
+                if (String.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    history.Add(new List<string>()
+                    {
+                        input,
+                        result.Result.ToString()
+                    });                
+                }
             }
             else
             {
@@ -79,6 +98,11 @@ namespace CalculatorCore
                 }
             }
             return false;
+        }
+
+        public List<List<string>> getHistory()
+        {
+            return this.history;
         }
     }
 
