@@ -18,48 +18,56 @@ namespace CalculatorCore
             decimal x;
             decimal y;
           
-            if (parts.Length == 2 && isOperator(parts[0]))
+
+            if (input.isValidCalculatorInputFormat())
             {
-                if (decimal.TryParse(parts[1], out x) == false)
+                if (input.isContinuationInputFormat())
                 {
-                    return new EvaluationResult { ErrorMessage = $"\u001b[31mThe first number, '{parts[1]}', was not a valid number.\u001b[0m" };
-                }
-
-                result = performOperation(Decimal.Parse(storedValue.ToString()), parts[0], x);
-
-                if (String.IsNullOrEmpty(result.ErrorMessage))
-                {
-                    history.Add(new List<string>()
+                    if (decimal.TryParse(parts[1], out x) == false)
                     {
-                        $"{storedValue} {input}",
-                        result.Result.ToString()
-                    });
-                        
-                }
-            } 
-            else if (parts.Length == 3 && isOperator(parts[1]))
-            {
-                if (decimal.TryParse(parts[0], out x) == false)
-                {
-                    return new EvaluationResult { ErrorMessage = $"\u001b[31mThe first number, '{parts[0]}', was not a valid number.\u001b[0m" };
-                }
-                if (decimal.TryParse(parts[2], out y) == false)
-                {
-                    return new EvaluationResult { ErrorMessage = $"\u001b[31mThe second number, '{parts[2]}', was not a valid number.\u001b[0m" };
-                }
+                        return new EvaluationResult { ErrorMessage = $"The first number, '{parts[1]}', was not a valid number." };
+                    }
 
-                result = performOperation(x, parts[1], y);
-                if (String.IsNullOrEmpty(result.ErrorMessage))
-                {
-                    history.Add(new List<string>()
+                    result = performOperation(Decimal.Parse(storedValue.ToString()), parts[0], x);
+
+                    if (String.IsNullOrEmpty(result.ErrorMessage))
                     {
-                        input,
-                        result.Result.ToString()
-                    });                
+                        history.Add(new List<string>()
+                        {
+                            $"{storedValue} {input}",
+                            result.Result.ToString()
+                        });
+                    }
                 }
+                else if (input.isExpressionInputFormat())
+                {
+                    if (decimal.TryParse(parts[0], out x) == false)
+                    {
+                        return new EvaluationResult { ErrorMessage = $"The first number, '{parts[0]}', was not a valid number." };
+                    }
+                    if (decimal.TryParse(parts[2], out y) == false)
+                    {
+                        return new EvaluationResult { ErrorMessage = $"The second number, '{parts[2]}', was not a valid number." };
+                    }
+
+                    result = performOperation(x, parts[1], y);
+                    if (String.IsNullOrEmpty(result.ErrorMessage))
+                    {
+                        history.Add(new List<string>()
+                        {
+                            input,
+                            result.Result.ToString()
+                        });
+                    }
+                }     
             }
             else
             {
+                if (parts.Length > 1 && parts[1].isOperator() == false && parts[0].isOperator() == false)
+                {
+                    return new EvaluationResult { ErrorMessage = "The operator 'plus' is not valid. Must use + - * /" };
+                }
+
                 return new EvaluationResult { ErrorMessage = "The operation must be in the form '5 + 8' or '+ 8'. Please try again." };
             }
 
@@ -86,18 +94,6 @@ namespace CalculatorCore
                 default:
                     return new EvaluationResult { ErrorMessage = $"The operator '{op}' is not valid. Must use + - * /" };
             }
-        }
-
-        public bool isOperator(string op)
-        {
-            foreach (char ch in "+-*/")
-            {
-                if (ch.ToString() == op)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public List<List<string>> getHistory()

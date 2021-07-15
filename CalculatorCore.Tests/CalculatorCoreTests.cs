@@ -25,14 +25,14 @@ namespace CalculatorCore.Tests
         public void ValidFirstOperand()
         {
             EvaluationResult result = _calc.Evaluate("one + 2");
-            Assert.AreEqual("\u001b[31mThe first number, 'one', was not a valid number.\u001b[0m", result.ErrorMessage);
+            Assert.AreEqual("The first number, 'one', was not a valid number.", result.ErrorMessage);
         }
 
         [TestMethod]
         public void ValidSecondOperand()
         {
             EvaluationResult result = _calc.Evaluate("1 + bob");
-            Assert.AreEqual("\u001b[31mThe second number, 'bob', was not a valid number.\u001b[0m", result.ErrorMessage);
+            Assert.AreEqual("The second number, 'bob', was not a valid number.", result.ErrorMessage);
 
         }
 
@@ -91,12 +91,12 @@ namespace CalculatorCore.Tests
         [TestMethod]
         public void isAnOperatorCheck()
         {
-            Assert.IsTrue(_calc.isOperator("+"));
-            Assert.IsTrue(_calc.isOperator("-"));
-            Assert.IsTrue(_calc.isOperator("/"));
-            Assert.IsTrue(_calc.isOperator("*"));
+            Assert.IsTrue("+".isOperator());
+            Assert.IsTrue("-".isOperator());
+            Assert.IsTrue("/".isOperator());
+            Assert.IsTrue("*".isOperator());
 
-            Assert.IsFalse(_calc.isOperator("plus"));
+            Assert.IsFalse("plus".isOperator());
         }
     }
 }

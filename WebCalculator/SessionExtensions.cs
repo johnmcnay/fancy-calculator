@@ -19,5 +19,4 @@ namespace WebCalculator
             return value == null ? default : JsonConvert.DeserializeObject<T>(value);
         }
     }
-
 }
